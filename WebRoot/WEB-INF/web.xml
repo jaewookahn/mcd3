@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.4" 
+	xmlns="http://java.sun.com/xml/ns/j2ee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
+	http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+  
+  <servlet>
+        <servlet-name>ConceptDetail</servlet-name>
+        <servlet-class>servlet.ConceptDetail</servlet-class>
+  </servlet>
+  <servlet-mapping>
+        <servlet-name>ConceptDetail</servlet-name>
+        <url-pattern>/ConceptDetail</url-pattern>
+  </servlet-mapping>
+  
+    <servlet>
+        <servlet-name>SearchConcept</servlet-name>
+        <servlet-class>servlet.SearchConcept</servlet-class>
+  </servlet>
+  <servlet-mapping>
+        <servlet-name>SearchConcept</servlet-name>
+        <url-pattern>/SearchConcept</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+        <servlet-name>SearchString</servlet-name>
+        <servlet-class>servlet.SearchString</servlet-class>
+  </servlet>
+  <servlet-mapping>
+        <servlet-name>SearchString</servlet-name>
+        <url-pattern>/SearchString</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+        <servlet-name>StringDetail</servlet-name>
+        <servlet-class>servlet.StringDetail</servlet-class>
+  </servlet>
+  <servlet-mapping>
+        <servlet-name>StringDetail</servlet-name>
+        <url-pattern>/StringDetail</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+        <servlet-name>GetConceptID</servlet-name>
+        <servlet-class>servlet.GetConceptID</servlet-class>
+  </servlet>
+  <servlet-mapping>
+        <servlet-name>GetConceptID</servlet-name>
+        <url-pattern>/GetConceptID</url-pattern>
+  </servlet-mapping>
+  
+    <servlet>
+        <servlet-name>GetConceptDecendants</servlet-name>
+        <servlet-class>servlet.GetConceptDecendants</servlet-class>
+  </servlet>
+  <servlet-mapping>
+        <servlet-name>GetConceptDecendants</servlet-name>
+        <url-pattern>/GetConceptDecendants</url-pattern>
+  </servlet-mapping>
+  
+      <servlet>
+        <servlet-name>GetTreeChildren</servlet-name>
+        <servlet-class>servlet.GetTreeChildren</servlet-class>
+  </servlet>
+  <servlet-mapping>
+        <servlet-name>GetTreeChildren</servlet-name>
+        <url-pattern>/GetTreeChildren</url-pattern>
+  </servlet-mapping>
+  
+  
+        <servlet>
+        <servlet-name>ShowConceptDetail</servlet-name>
+        <servlet-class>servlet.ShowConceptDetail</servlet-class>
+  </servlet>
+  <servlet-mapping>
+        <servlet-name>ShowConceptDetail</servlet-name>
+        <url-pattern>/ShowConceptDetail</url-pattern>
+  </servlet-mapping>
+  
+  
+          <servlet>
+        <servlet-name>SearchGroupedConcepts</servlet-name>
+        <servlet-class>servlet.SearchGroupedConcepts</servlet-class>
+  </servlet>
+  <servlet-mapping>
+        <servlet-name>SearchGroupedConcepts</servlet-name>
+        <url-pattern>/SearchGroupedConcepts</url-pattern>
+  </servlet-mapping>
+  
+            <servlet>
+        <servlet-name>GetConceptBasic</servlet-name>
+        <servlet-class>servlet.GetConceptBasic</servlet-class>
+  </servlet>
+  <servlet-mapping>
+        <servlet-name>GetConceptBasic</servlet-name>
+        <url-pattern>/GetConceptBasic</url-pattern>
+  </servlet-mapping>
+ 
+</web-app>

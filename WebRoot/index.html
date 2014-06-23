@@ -1,0 +1,239 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+
+	<title>Getty Thesaurus Search</title>
+
+	<link type="text/css" rel="stylesheet" href="css/layout-default-latest.css" />
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+	<link rel="stylesheet" href="css/jquery.treeview.css" />
+  
+	<style type="text/css">
+	html, body {
+		background:	#666;
+		width:		100%;
+		height:		100%;					
+		padding:	0;
+		margin:		0;
+		overflow:	auto; /* when page gets too small */
+		font-family: Arial;
+		font-size:12px;
+		
+	}
+	
+	#ConceptList, #brainmapdetail a:link {color:#1240AB;}      /* unvisited link */
+    #ConceptList, #brainmapdetail a:visited {color:#1240AB;}  /* visited link */
+    #ConceptList, #brainmapdetail a:hover {color:#01A383;}  /* mouse over link */
+    #ConceptList, #brainmapdetail a:active {color:#2619B1;}  /* selected link */
+    
+	#container {
+		background:	#999;
+		height:		100%;
+		margin:		0 auto;
+		width:		100%;
+
+	}
+	
+	#searcharea{
+	  margin-left:auto;
+	  margin-right:auto;
+	  width:330px;
+	  font-weight:bold;
+	}
+	
+	.bmbackground {
+  fill: none;
+  pointer-events: all;
+}
+	
+	form{
+		background:	#999;
+		height:		100%;
+		margin:		0 auto;
+		width:		100%;
+	}
+	.pane {
+		display:	none; /* will appear when layout inits */
+	}
+
+.highlighted_text {    
+	font-weight: bold;	
+}
+.normal_text {
+	font-weight: normal;
+}
+.ui-menu { width: 150px; }
+
+
+   </style>
+
+	<script type="text/javascript" src="js/jquery-latest.js"></script>
+	<script type="text/javascript" src="js/jquery.cookie.js"></script>
+	<script type="text/javascript" src="js/jquery-ui-latest.js"></script>
+	<script type="text/javascript" src="js/jquery.layout-latest.js"></script>
+	<script type="text/javascript" src="js/jquery.treeview.js"></script>
+	<script type="text/javascript" src="js/jquery.treeview.edit.js"></script>
+	<script type="text/javascript" src="js/jquery.treeview.async.js"></script>
+
+	 
+	<script type="text/javascript">
+	var coatingterms=[];
+	var coatingids=[];
+	var textileterms=[];
+	var textileids=[];
+	var leveltree;
+	var alltree;
+	var rootid;
+	function initTrees() {
+	
+		$("#coatingtree").treeview({			
+			url: "GetTreeChildren?cid=2580",					
+		});
+		
+		$("#textiletree").treeview({			
+			url: "GetTreeChildren?cid=25530",					
+		});		
+		
+	}
+	
+	$(document).ready(function () {   
+         
+		$('#container').layout();		
+		
+		initTrees();
+		
+		$("#browseHierarchy").change(function(){
+		  var thisvalue = $("#browseHierarchy").val();
+		  var coatingtree = $("#coatingtree");
+		  var textiletree = $("#textiletree");
+		  
+		  $("#coatingall").hide();
+		  $("#textileall").hide();
+	
+		  if(thisvalue=="coating"){coatingtree.show();leveltree=$("#coatingtree");alltree=$("#coatingall");rootid=2580;}
+		  else coatingtree.hide();
+		  if(thisvalue=="textile"){textiletree.show();leveltree=$("#textiletree");alltree=$("#textileall");rootid=25530;}
+		  else textiletree.hide();
+		  if(thisvalue=="-1"){
+		       $("#expand").hide();
+		       $("#level").hide();		  
+		  }
+		  else{
+		       $("#expand").show();
+		       $("#level").show();
+		  }
+		});	
+		
+		
+		$("#expand").click(function(){
+		    leveltree.hide();
+		    if(alltree.html()==""){
+		        alltree.treeview({	
+		            collapsed: false,
+			        prerendered: true,	
+			        //url: "GetTreeChildren?cid="+rootid+"&data=all"
+			        url:rootid+".json"
+			        			
+		        });
+		    }
+		    alltree.show();		
+		});
+		
+		$("#level").click(function(){
+		    alltree.hide();		    
+		    leveltree.show();		
+		});        
+	});
+	
+	function showConcept(term,cid,rootid){
+	    if(rootid=="2580"){
+	       coatingterms.push(term);
+	       coatingids.push(cid);
+	       showSelected("coating");	       
+	    }
+	    if(rootid=="25530"){
+	       textileterms.push(term);
+	       textileids.push(cid);
+	       showSelected("textile");	
+	    }
+	    
+	    $.ajax({
+              url:"ShowConceptDetail",
+              data:'cid='+cid,
+	          success: function(msg){
+                  $("#conceptdetails").html("<hr>"+msg+$("#conceptdetails").html());             
+              }
+            }); 
+	}
+	
+	function showSelected(position){
+	   var terms;
+	   var ids;
+	   var div;
+	   if(position=="coating"){terms=coatingterms;ids=coatingids;div=$("#showcoating");}
+	   else if(position=="textile"){terms=textileterms;ids=textileids;div=$("#showtextile");}
+	    var l = terms.length-1;
+	    if(l<0){div.html(""); }
+	     else{
+	        text="";
+	        for(var i=0;i<l;i++)
+               text += "<a onclick=\"javascript:removeConcept("+i+",'"+position+"');return false;\" href='#'><font color='red'>"+terms[i]+"</font></a>[x] or " ; 
+   
+            
+            text += "<a onclick=\"javascript:removeConcept("+l+",'"+position+"');return false;\" href='#'><font color='red'>"+terms[l]+"</font></a>[x]<br><br>";
+	        div.html(text);
+	    }
+	}
+	
+	function removeConcept(index,position){
+	  var div;
+	  if(position=="coating"){terms=coatingterms;ids=coatingids;div=$("#showcoating");}
+	   else if(position=="textile"){terms=textileterms;ids=textileids;div=$("#showtextile");}
+	   terms.splice(index,1);
+       ids.splice(index,1);
+	   
+	   showSelected(position);
+	}
+	
+	</script>
+	
+</head>
+<body>
+<div id="header">
+  <h2 align="center"> <font color="red">Getty Thesaurus Search</font></h2> 
+</div>
+<div id="container">
+	<div class="pane ui-layout-center" id="tabs">
+	Coating Material:
+	<div id="showcoating">&nbsp;</div>
+
+	Textile Material:
+	<div id="showtextile">&nbsp; </div>
+	
+	<div id="conceptdetails"></div>
+
+   </div>
+    
+    <div class="pane ui-layout-west" >    
+    
+        <select id="browseHierarchy">
+            <option value="-1">Select Hierarchy</option>
+            <option value="coating">Coating Material</option>
+            <option value="textile">Textile Material</option>
+       </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+       <button type="button" style="display:none" id="expand">Expand All</button>
+       <button type="button" style="display:none" id="level">LevelbyLevel</button>
+       
+       <ul id="coatingtree" style="display:none"></ul>
+       <ul id="textiletree" style="display:none"></ul>
+       <ul id="coatingall" style="display:none"></ul>
+       <ul id="textileall" style="display:none"></ul>
+    </div>
+
+	
+</div>
+</body>
+</html>
